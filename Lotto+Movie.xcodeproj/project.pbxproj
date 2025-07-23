@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		034EDA092E30A7FC001178FB /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 034EDA082E30A7FC001178FB /* SnapKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		034ED9EF2E30A6F7001178FB /* Lotto+Movie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lotto+Movie.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				034EDA092E30A7FC001178FB /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = "Lotto+Movie";
 			packageProductDependencies = (
+				034EDA082E30A7FC001178FB /* SnapKit */,
 			);
 			productName = "Lotto+Movie";
 			productReference = 034ED9EF2E30A6F7001178FB /* Lotto+Movie.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 034ED9E62E30A6F7001178FB;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				034EDA072E30A7FC001178FB /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 034ED9F02E30A6F7001178FB /* Products */;
 			projectDirPath = "";
@@ -345,6 +354,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		034EDA072E30A7FC001178FB /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		034EDA082E30A7FC001178FB /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 034EDA072E30A7FC001178FB /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 034ED9E72E30A6F7001178FB /* Project object */;
 }
