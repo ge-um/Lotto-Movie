@@ -11,8 +11,20 @@ import UIKit
 // TODO: Refactoring 필요..
 class LottoViewController: UIViewController {
     // MARK: - Views
-    let roundTextField = RoundTextField()
+    let roundTextField: UITextField = {
+        let textField = UITextField()
+        
+        textField.borderStyle = .roundedRect
+
+        return textField
+    }()
     
+    let pickerView: UIPickerView = {
+        let pickerView = UIPickerView()
+        
+        return pickerView
+    }()
+
     let winningNumberInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "당첨번호 안내"
@@ -83,6 +95,8 @@ class LottoViewController: UIViewController {
         
         return stackView
     }()
+    
+    let rounds = (1...1181).map { Int($0) }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,6 +104,18 @@ class LottoViewController: UIViewController {
         configureDependency()
         configureLayout()
         configureUI()
+        
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        roundTextField.inputView = pickerView
+    }
+    
+    func reloadNumber() {
+        for view in lottoBallStackView.arrangedSubviews {
+            if let lottoBall = view as? LottoBallView {
+                lottoBall.label.text = String((1...45).randomElement()!)
+            }
+        }
     }
 }
 
@@ -140,5 +166,24 @@ extension LottoViewController: CustomViewProtocol {
     
     func configureUI() {
         view.backgroundColor = .white
+    }
+}
+
+extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return  1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return rounds.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return String(rounds[row])
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        roundTextField.text = String(rounds[row])
+        reloadNumber()
     }
 }

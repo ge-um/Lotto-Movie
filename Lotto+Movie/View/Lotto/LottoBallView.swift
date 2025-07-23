@@ -9,11 +9,12 @@ import SnapKit
 import UIKit
 
 class LottoBallView: UIView {
+    let label = UILabel()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         let colorSet: [UIColor] = [.systemYellow, .systemGray, .systemBlue, .systemRed]
-        let label = UILabel()
         
         label.text = String((1...45).randomElement()!)
         label.font = .systemFont(ofSize: 18, weight: .bold)
