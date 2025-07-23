@@ -18,7 +18,7 @@ class NavigationViewController: UIViewController {
     
     let movieButton = {
         let button = NavigationButton()
-        button.setTitle("Move", for: .normal)
+        button.setTitle("Movie", for: .normal)
         return button
     }()
     
