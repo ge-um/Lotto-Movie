@@ -70,7 +70,6 @@ extension NavigationViewController: CustomViewProtocol {
     func configureAction() {
         lottoButton.addTarget(self, action: #selector(lottoButtonTapped), for: .touchUpInside)
         movieButton.addTarget(self, action: #selector(movieButtonTapped), for: .touchUpInside)
-        
     }
     
     func configureNavigation() {

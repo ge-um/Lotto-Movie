@@ -14,6 +14,7 @@ class MovieTableViewCell: UITableViewCell {
         let label = UILabel()
         label.backgroundColor = .white
         label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.textAlignment = .center
         
         return label
     }()
@@ -29,16 +30,18 @@ class MovieTableViewCell: UITableViewCell {
     
     var date: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .light)
+        label.font = .systemFont(ofSize: 11, weight: .light)
         label.textColor = .white
-        
+
         return label
     }()
     
     let movieCell: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fill
+        stackView.alignment = .center
+        stackView.spacing = 16
         
         return stackView
     }()
@@ -65,6 +68,14 @@ extension MovieTableViewCell: CustomViewProtocol {
     }
     
     func configureLayout() {
+        movieNumber.snp.makeConstraints { make in
+            make.width.equalTo(30)
+        }
+        
+        date.snp.makeConstraints { make in
+            make.width.equalTo(68)
+        }
+        
         movieCell.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(10)
         }
