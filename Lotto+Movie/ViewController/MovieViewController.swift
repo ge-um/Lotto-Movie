@@ -9,7 +9,7 @@ import SnapKit
 import UIKit
 
 class MovieViewController: UIViewController {
-    let imageView: UIImageView = {
+    let backgroundImageView: UIImageView = {
         let image = UIImage(named: "movie")
         let imageView = UIImageView(image: image)
         
@@ -86,7 +86,7 @@ extension MovieViewController: UITextFieldDelegate {
 
 extension MovieViewController: CustomViewProtocol {
     func configureDependency() {
-        view.addSubview(imageView)
+        view.addSubview(backgroundImageView)
         
         searchBar.addArrangedSubview(searchTextField)
         searchBar.addArrangedSubview(searchButton)
@@ -96,7 +96,7 @@ extension MovieViewController: CustomViewProtocol {
     }
     
     func configureLayout() {
-        imageView.snp.makeConstraints { make in
+        backgroundImageView.snp.makeConstraints { make in
             make.size.equalToSuperview()
         }
         
@@ -117,7 +117,7 @@ extension MovieViewController: CustomViewProtocol {
     func configureUI() {
         // TODO: - 네비게이션 바가 잘 안보이는 이슈가 있음.
         view.backgroundColor = .black
-        imageView.alpha = 0.5
+        backgroundImageView.alpha = 0.5
                 
         tableView.dataSource = self
         tableView.delegate = self
