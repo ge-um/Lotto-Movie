@@ -10,5 +10,6 @@ import Foundation
 @objc protocol CustomViewProtocol {
     func configureDependency()
     func configureLayout()
-    @objc optional func configureUI()
+    func configureUI()
+    @objc optional func configureAction()
 }

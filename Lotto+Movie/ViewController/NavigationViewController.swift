@@ -30,6 +30,9 @@ class NavigationViewController: UIViewController {
         
         configureDependency()
         configureLayout()
+        configureUI()
+        configureAction()
+        configureNavigation()
     }
 }
 
@@ -59,4 +62,31 @@ extension NavigationViewController: CustomViewProtocol {
             make.centerY.equalToSuperview()
         }
     }
+    
+    func configureUI() {
+        view.backgroundColor = .white
+    }
+    
+    func configureAction() {
+        lottoButton.addTarget(self, action: #selector(lottoButtonTapped), for: .touchUpInside)
+        movieButton.addTarget(self, action: #selector(movieButtonTapped), for: .touchUpInside)
+    }
+    
+    func configureNavigation() {
+        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        backBarButtonItem.tintColor = .darkGray
+        navigationItem.backBarButtonItem = backBarButtonItem
+    }
+    
+    @objc func lottoButtonTapped() {
+        let vc = LottoViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func movieButtonTapped() {
+        let vc = MovieViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
 }
