@@ -18,8 +18,8 @@ class MovieViewController: UIViewController {
         
         return imageView
     }()
-
-    let searchBar: UIStackView = {
+    
+    let searchTextField: UITextField = {
         let textField = UITextField()
         
         textField.borderStyle = .roundedRect
@@ -27,37 +27,70 @@ class MovieViewController: UIViewController {
         textField.layer.borderWidth = 1
         textField.backgroundColor = .clear
         
+        return textField
+    }()
+    
+    let searchButton: UIButton = {
         let button = UIButton()
         
         button.backgroundColor = .white
         button.setTitle("검색", for: .normal)
         button.setTitleColor(.black, for: .normal)
+        
+        return button
+    }()
 
+    let searchBar: UIStackView = {
         let stackView = UIStackView()
         
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.spacing = 16
-        
-        stackView.addArrangedSubview(textField)
-        stackView.addArrangedSubview(button)
-        
         return stackView
     }()
     
     let tableView = UITableView()
+    
+    var movies = MovieInfo.movies
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureDependency()
         configureLayout()
         configureUI()
+        
+        searchTextField.delegate = self
+        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+    }
+    
+    // MARK: - Action
+    func shuffleData() {
+        movies.shuffle()
+        tableView.reloadData()
+    }
+    
+    @objc func searchButtonTapped() {
+        shuffleData()
+        view.endEditing(true)
+    }
+}
+
+extension MovieViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print(#function)
+        shuffleData()
+        view.endEditing(true)
+        return true
     }
 }
 
 extension MovieViewController: CustomViewProtocol {
     func configureDependency() {
         view.addSubview(imageView)
+        
+        searchBar.addArrangedSubview(searchTextField)
+        searchBar.addArrangedSubview(searchButton)
+        
         view.addSubview(searchBar)
         view.addSubview(tableView)
     }
@@ -96,15 +129,15 @@ extension MovieViewController: CustomViewProtocol {
 
 extension MovieViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return MovieInfo.movies.count
+        return movies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableViewCell") as! MovieTableViewCell
         
         cell.movieNumber.text = String(indexPath.row + 1)
-        cell.movieTitle.text = MovieInfo.movies[indexPath.row].title
-        cell.date.text = MovieInfo.movies[indexPath.row].releaseDate
+        cell.movieTitle.text = movies[indexPath.row].title
+        cell.date.text = movies[indexPath.row].releaseDate
         
         return cell
     }
