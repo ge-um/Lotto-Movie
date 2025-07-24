@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchBar: UIStackView {
+class MovieSearchBar: UIStackView {
     let textField: UITextField = {
         let textField = UITextField()
         
@@ -45,7 +45,7 @@ class SearchBar: UIStackView {
 }
 
 // TODO: - Responder Chain 알아보기
-extension SearchBar: UITextFieldDelegate {
+extension MovieSearchBar: UITextFieldDelegate {
     func configure() {
         textField.delegate = self
         

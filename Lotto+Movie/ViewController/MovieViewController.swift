@@ -20,7 +20,7 @@ class MovieViewController: UIViewController {
         return imageView
     }()
     
-    let searchBar = SearchBar()
+    let searchBar = MovieSearchBar()
     let tableView = UITableView()
     var movies: [Movie] = []
     
