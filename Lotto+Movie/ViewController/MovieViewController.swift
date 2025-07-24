@@ -5,6 +5,7 @@
 //  Created by 금가경 on 7/23/25.
 //
 
+import Alamofire
 import SnapKit
 import UIKit
 
@@ -21,7 +22,7 @@ class MovieViewController: UIViewController {
     
     let searchBar = SearchBar()
     let tableView = UITableView()
-    var movies = MovieInfo.movies
+    var movies: [Movie] = []
     
     lazy var inputDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -40,6 +41,8 @@ class MovieViewController: UIViewController {
         configureDependency()
         configureLayout()
         configureUI()
+        
+        fetchData()
     }
 }
 
@@ -81,6 +84,29 @@ extension MovieViewController: CustomViewProtocol {
     }
 }
 
+extension MovieViewController {
+    func fetchData() {
+        let url = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=19e95640f81d5ca0abe4c3d77f04eb1d&targetDt=20120101"
+        
+        AF.request(url, method: .get)
+            .responseDecodable(of: BoxOfficeResponse.self) { [weak self] response in
+                
+                guard let self = self else { return }
+                
+                switch response.result {
+                case .success(let boxOfficeResponse):
+
+                    movies = boxOfficeResponse.boxOfficeResult.dailyBoxOfficeList.map { Movie(title: $0.movieNm, releaseDate: $0.openDt, audienceCount: Int($0.audiCnt)!)}
+                    self.tableView.reloadData()
+                    print(boxOfficeResponse)
+                    
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
+}
+
 extension MovieViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movies.count
@@ -91,12 +117,7 @@ extension MovieViewController: UITableViewDelegate, UITableViewDataSource {
         
         cell.movieNumber.text = String(indexPath.row + 1)
         cell.movieTitle.text = movies[indexPath.row].title
-        
-        if let releaseDate = inputDateFormatter.date(from: movies[indexPath.row].releaseDate) {
-            let formattedDate =
-                outputdateFormatter.string(from: releaseDate)
-            cell.date.text = formattedDate
-        }
+        cell.date.text = movies[indexPath.row].releaseDate
         
         return cell
     }
