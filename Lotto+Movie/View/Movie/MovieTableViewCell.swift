@@ -49,7 +49,9 @@ class MovieTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        configureUI()
+        configureStyle()
+        configureSubviews()
+        configureConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -57,16 +59,20 @@ class MovieTableViewCell: UITableViewCell {
     }
 }
 
-extension MovieTableViewCell {
-    private func configureUI() {
+extension MovieTableViewCell: CustomViewProtocol {
+    internal func configureStyle() {
         backgroundColor = .clear
-
+    }
+    
+    internal func configureSubviews() {
         movieCell.addArrangedSubview(movieNumber)
         movieCell.addArrangedSubview(movieTitle)
         movieCell.addArrangedSubview(movieReleaseDate)
         
         contentView.addSubview(movieCell)
-        
+    }
+    
+    internal func configureConstraints() {
         movieNumber.snp.makeConstraints { make in
             make.width.equalTo(30)
         }
@@ -78,9 +84,9 @@ extension MovieTableViewCell {
         }
     }
     
-    func configureData(rank: String, movie: Movie) {
-        movieNumber.text = rank
-        movieTitle.text = movie.title
-        movieReleaseDate.text = movie.releaseDate
+    func configureData(movie: DailyBoxOfficeList) {
+        movieNumber.text = movie.rank
+        movieTitle.text = movie.movieNm
+        movieReleaseDate.text = movie.openDt
     }
 }

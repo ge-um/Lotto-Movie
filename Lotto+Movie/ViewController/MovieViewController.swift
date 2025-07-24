@@ -22,13 +22,14 @@ class MovieViewController: UIViewController {
     
     let searchBar = MovieSearchBar()
     let tableView = UITableView()
-    var movies: [Movie] = []
+    var movies: [DailyBoxOfficeList] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSubviews()
         configureConstraints()
         configureStyle()
+        configureTableView()
         configureInitialData()
         bindAction()
     }
@@ -101,12 +102,9 @@ extension MovieViewController: CustomViewProtocol {
                     movies = boxOfficeResponse
                         .boxOfficeResult
                         .dailyBoxOfficeList
-                        .sorted { $0.audiCnt > $1.audiCnt }
+                        .sorted { Int($0.rank)! < Int($1.rank)! }
                         .prefix(3)
-                        .map { Movie(title: $0.movieNm,
-                                     releaseDate: $0.openDt,
-                                     audienceCount: Int($0.audiCnt)!)
-                        }
+                        .map { $0 }
                     
                     self.tableView.reloadData()
                     
@@ -127,9 +125,8 @@ extension MovieViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableViewCell") as! MovieTableViewCell
         
-        let rank = indexPath.row + 1
         let movie = movies[indexPath.row]
-        cell.configureData(rank: String(rank), movie: movie)
+        cell.configureData(movie: movie)
         
         return cell
     }
