@@ -36,7 +36,7 @@ class NavigationViewController: UIViewController {
     }
 }
 
-extension NavigationViewController: CustomViewProtocol {
+extension NavigationViewController {
     func configureSubviews() {
         stackView.addArrangedSubview(lottoButton)
         stackView.addArrangedSubview(movieButton)

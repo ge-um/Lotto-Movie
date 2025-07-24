@@ -11,5 +11,6 @@ import Foundation
     func configureSubviews()
     func configureConstraints()
     func configureStyle()
+    @objc optional func configureInitialData()
     @objc optional func bindAction()
 }

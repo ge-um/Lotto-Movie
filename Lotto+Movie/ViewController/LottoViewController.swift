@@ -103,15 +103,11 @@ class LottoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureDependency()
-        configureLayout()
-        configureUI()
-        
-        pickerView.delegate = self
-        pickerView.dataSource = self
-        roundTextField.inputView = pickerView
-        
-        fetchLotteryNumber()
+        configureSubviews()
+        configureConstraints()
+        configureStyle()
+        configurePickerView()
+        configureInitialData()
     }
     
     // TODO: need refactoring
@@ -157,8 +153,8 @@ class LottoViewController: UIViewController {
     }
 }
 
-extension LottoViewController {
-    func configureDependency() {
+extension LottoViewController: CustomViewProtocol {
+    func configureSubviews() {
         lottoInfoStackView.addArrangedSubview(winningNumberInfoLabel)
         lottoInfoStackView.addArrangedSubview(drawDateLabel)
         
@@ -179,7 +175,7 @@ extension LottoViewController {
         view.addSubview(verticalStackView)
     }
     
-    func configureLayout() {
+    func configureConstraints() {
         roundTextField.snp.makeConstraints { make in
             make.height.equalTo(44)
         }
@@ -202,14 +198,24 @@ extension LottoViewController {
         }
     }
     
-    func configureUI() {
+    func configureStyle() {
         view.backgroundColor = .white
+    }
+    
+    func configureInitialData() {
+        fetchLotteryNumber()
+    }
+    
+    func configurePickerView() {
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        roundTextField.inputView = pickerView
     }
 }
 
 extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return  1
+        return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
