@@ -8,18 +8,20 @@
 import UIKit
 
 class SearchBar: UIStackView {
-    let searchTextField: UITextField = {
+    let textField: UITextField = {
         let textField = UITextField()
         
         textField.borderStyle = .roundedRect
         textField.layer.borderColor = UIColor.white.cgColor
         textField.layer.borderWidth = 1
         textField.backgroundColor = .clear
+        textField.keyboardType = .numberPad
+        textField.textColor = .white
                 
         return textField
     }()
     
-    let searchButton: UIButton = {
+    let button: UIButton = {
         let button = UIButton()
         
         button.backgroundColor = .white
@@ -45,29 +47,24 @@ class SearchBar: UIStackView {
 // TODO: - Responder Chain 알아보기
 extension SearchBar: UITextFieldDelegate {
     func configure() {
-        searchTextField.delegate = self
-        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+        textField.delegate = self
         
         self.axis = .horizontal
         self.distribution = .fill
         self.spacing = 16
         
-        self.addArrangedSubview(searchTextField)
-        self.addArrangedSubview(searchButton)
+        self.addArrangedSubview(textField)
+        self.addArrangedSubview(button)
         
-        searchButton.snp.makeConstraints { make in
+        button.snp.makeConstraints { make in
             make.width.equalTo(60)
         }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         print(#function)
-        searchTextField.resignFirstResponder()
+        textField.resignFirstResponder()
         return true
-    }
-    
-    @objc func searchButtonTapped() {
-        searchTextField.resignFirstResponder()
     }
     
 }

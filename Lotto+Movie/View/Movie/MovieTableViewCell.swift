@@ -78,8 +78,8 @@ extension MovieTableViewCell {
         }
     }
     
-    func configureData(num: String, movie: Movie) {
-        movieNumber.text = num
+    func configureData(rank: String, movie: Movie) {
+        movieNumber.text = rank
         movieTitle.text = movie.title
         movieReleaseDate.text = movie.releaseDate
     }

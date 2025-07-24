@@ -24,30 +24,19 @@ class MovieViewController: UIViewController {
     let tableView = UITableView()
     var movies: [Movie] = []
     
-    lazy var inputDateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd"
-        return formatter
-    }()
-    
-    lazy var outputdateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureDependency()
         configureLayout()
         configureUI()
         configureData()
+        configureAction()
     }
 }
 
 extension MovieViewController: CustomViewProtocol {
     func configureData() {
-        fetchData()
+        fetchAPI()
     }
     
     func configureDependency() {
@@ -86,11 +75,21 @@ extension MovieViewController: CustomViewProtocol {
         
         tableView.backgroundColor = .clear
     }
+    
+    func configureAction() {
+        searchBar.button.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func searchButtonTapped() {
+        print(#function)
+        searchBar.textField.resignFirstResponder()
+        fetchAPI(date: searchBar.textField.text!)
+    }
 }
 
 extension MovieViewController {
-    func fetchData() {
-        let url = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=19e95640f81d5ca0abe4c3d77f04eb1d&targetDt=20120101"
+    func fetchAPI(date: String = "20250723") {
+        let url = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=19e95640f81d5ca0abe4c3d77f04eb1d&targetDt=\(date)"
         
         AF.request(url, method: .get)
             .responseDecodable(of: BoxOfficeResponse.self) { [weak self] response in
@@ -103,6 +102,8 @@ extension MovieViewController {
                     movies = boxOfficeResponse
                         .boxOfficeResult
                         .dailyBoxOfficeList
+                        .sorted { $0.audiCnt > $1.audiCnt }
+                        .prefix(3)
                         .map { Movie(title: $0.movieNm,
                                      releaseDate: $0.openDt,
                                      audienceCount: Int($0.audiCnt)!)
@@ -121,15 +122,15 @@ extension MovieViewController {
 
 extension MovieViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movies.count
+        return min(movies.count, 3)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableViewCell") as! MovieTableViewCell
         
-        let num = indexPath.row
-        let movie = movies[num]
-        cell.configureData(num: String(num), movie: movie)
+        let rank = indexPath.row + 1
+        let movie = movies[indexPath.row]
+        cell.configureData(rank: String(rank), movie: movie)
         
         return cell
     }
