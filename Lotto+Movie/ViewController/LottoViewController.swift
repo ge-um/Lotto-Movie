@@ -5,6 +5,7 @@
 //  Created by 금가경 on 7/23/25.
 //
 
+import Alamofire
 import SnapKit
 import UIKit
 
@@ -42,7 +43,7 @@ class LottoViewController: UIViewController {
         return label
     }()
     
-    let resultLabel = ResultLabel()
+    var resultLabel = ResultLabel(drawNumber: 1181)
     
     let lineView: UIView = {
         let view = UIView()
@@ -97,6 +98,7 @@ class LottoViewController: UIViewController {
     }()
     
     let rounds = (1...1181).map { Int($0) }
+    var currentLottery: Lottery?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,14 +110,50 @@ class LottoViewController: UIViewController {
         pickerView.delegate = self
         pickerView.dataSource = self
         roundTextField.inputView = pickerView
+        
+        fetchLotteryNumber()
     }
     
+    // TODO: need refactoring
     func reloadNumber() {
+        guard let currentLottery = currentLottery else { return }
+        let nums: [Int] = [
+            currentLottery.drwtNo1,
+            currentLottery.drwtNo2,
+            currentLottery.drwtNo3,
+            currentLottery.drwtNo4,
+            currentLottery.drwtNo5,
+            currentLottery.drwtNo6,
+            currentLottery.bnusNo
+        ]
+        
+        var idx = 0
         for view in lottoBallStackView.arrangedSubviews {
             if let lottoBall = view as? LottoBallView {
-                lottoBall.label.text = String((1...45).randomElement()!)
+                lottoBall.label.text = "\(nums[idx])"
+                idx += 1
             }
         }
+        
+        drawDateLabel.text = "\(currentLottery.drwNoDate) 추첨"
+    }
+    
+    func fetchLotteryNumber(round: Int = 1181) {
+        let url = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=\(round)"
+        
+        AF.request(url, method: .post)
+            .responseDecodable(of: Lottery.self) { [weak self] response in
+                guard let self = self else { return }
+                switch response.result {
+                case .success(let lottery):
+                    self.currentLottery = lottery
+                    self.reloadNumber()
+                    print("success", lottery)
+                    
+                case .failure(let error):
+                    print("error", error)
+                }
+            }
     }
 }
 
@@ -183,7 +221,9 @@ extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        roundTextField.text = String(rounds[row])
-        reloadNumber()
+        let round = rounds[row]
+        roundTextField.text = String(round)
+        resultLabel.updateTitle(drawNumber: round)
+        fetchLotteryNumber(round: round)
     }
 }

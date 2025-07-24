@@ -55,10 +55,12 @@ class MovieViewController: UIViewController {
     }
     
     // MARK: - Action
+    
     func shuffleData() {
         movies.shuffle()
         tableView.reloadData()
     }
+    
     
     @objc func searchButtonTapped() {
         shuffleData()
