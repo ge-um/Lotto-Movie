@@ -20,9 +20,7 @@ class MovieViewController: UIViewController {
     }()
     
     let searchBar = SearchBar()
-    
     let tableView = UITableView()
-    
     var movies = MovieInfo.movies
     
     lazy var inputDateFormatter: DateFormatter = {
@@ -42,38 +40,6 @@ class MovieViewController: UIViewController {
         configureDependency()
         configureLayout()
         configureUI()
-        
-        for view in searchBar.arrangedSubviews {
-            if let textField = view as? UITextField {
-                textField.delegate = self
-            }
-            
-            if let button = view as? UIButton {
-                button.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
-            }
-        }
-    }
-    
-    // MARK: - Action
-    
-    func shuffleData() {
-        movies.shuffle()
-        tableView.reloadData()
-    }
-    
-    
-    @objc func searchButtonTapped() {
-        shuffleData()
-        view.endEditing(true)
-    }
-}
-
-extension MovieViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print(#function)
-        shuffleData()
-        view.endEditing(true)
-        return true
     }
 }
 
