@@ -41,12 +41,15 @@ class MovieViewController: UIViewController {
         configureDependency()
         configureLayout()
         configureUI()
-        
-        fetchData()
+        configureData()
     }
 }
 
 extension MovieViewController: CustomViewProtocol {
+    func configureData() {
+        fetchData()
+    }
+    
     func configureDependency() {
         view.addSubview(backgroundImageView)
         view.addSubview(searchBar)
@@ -78,6 +81,7 @@ extension MovieViewController: CustomViewProtocol {
                 
         tableView.dataSource = self
         tableView.delegate = self
+        
         tableView.register(MovieTableViewCell.self, forCellReuseIdentifier: "MovieTableViewCell")
         
         tableView.backgroundColor = .clear
@@ -96,8 +100,16 @@ extension MovieViewController {
                 switch response.result {
                 case .success(let boxOfficeResponse):
 
-                    movies = boxOfficeResponse.boxOfficeResult.dailyBoxOfficeList.map { Movie(title: $0.movieNm, releaseDate: $0.openDt, audienceCount: Int($0.audiCnt)!)}
+                    movies = boxOfficeResponse
+                        .boxOfficeResult
+                        .dailyBoxOfficeList
+                        .map { Movie(title: $0.movieNm,
+                                     releaseDate: $0.openDt,
+                                     audienceCount: Int($0.audiCnt)!)
+                        }
+                    
                     self.tableView.reloadData()
+                    
                     print(boxOfficeResponse)
                     
                 case .failure(let error):
@@ -115,9 +127,9 @@ extension MovieViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableViewCell") as! MovieTableViewCell
         
-        cell.movieNumber.text = String(indexPath.row + 1)
-        cell.movieTitle.text = movies[indexPath.row].title
-        cell.date.text = movies[indexPath.row].releaseDate
+        let num = indexPath.row
+        let movie = movies[num]
+        cell.configureData(num: String(num), movie: movie)
         
         return cell
     }

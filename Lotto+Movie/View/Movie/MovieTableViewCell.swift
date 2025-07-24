@@ -28,7 +28,7 @@ class MovieTableViewCell: UITableViewCell {
         return label
     }()
     
-    var date: UILabel = {
+    var movieReleaseDate: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 11, weight: .light)
         label.textColor = .white
@@ -48,8 +48,7 @@ class MovieTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        configureDependency()
-        configureLayout()
+
         configureUI()
     }
     
@@ -58,30 +57,30 @@ class MovieTableViewCell: UITableViewCell {
     }
 }
 
-extension MovieTableViewCell: CustomViewProtocol {
-    func configureDependency() {
+extension MovieTableViewCell {
+    private func configureUI() {
+        backgroundColor = .clear
+
         movieCell.addArrangedSubview(movieNumber)
         movieCell.addArrangedSubview(movieTitle)
-        movieCell.addArrangedSubview(date)
+        movieCell.addArrangedSubview(movieReleaseDate)
         
         contentView.addSubview(movieCell)
-    }
-    
-    func configureLayout() {
+        
         movieNumber.snp.makeConstraints { make in
             make.width.equalTo(30)
         }
-        
-        date.snp.makeConstraints { make in
+        movieReleaseDate.snp.makeConstraints { make in
             make.width.equalTo(68)
         }
-        
         movieCell.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(10)
         }
     }
     
-    func configureUI() {
-        backgroundColor = .clear
+    func configureData(num: String, movie: Movie) {
+        movieNumber.text = num
+        movieTitle.text = movie.title
+        movieReleaseDate.text = movie.releaseDate
     }
 }

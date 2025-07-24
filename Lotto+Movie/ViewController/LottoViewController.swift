@@ -157,7 +157,7 @@ class LottoViewController: UIViewController {
     }
 }
 
-extension LottoViewController: CustomViewProtocol {
+extension LottoViewController {
     func configureDependency() {
         lottoInfoStackView.addArrangedSubview(winningNumberInfoLabel)
         lottoInfoStackView.addArrangedSubview(drawDateLabel)
