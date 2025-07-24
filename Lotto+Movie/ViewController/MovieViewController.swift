@@ -75,7 +75,9 @@ extension MovieViewController: CustomViewProtocol {
     }
     
     func configureInitialData() {
-        fetchAPI()
+        let formattedYesterday = formattedYesterdayString()
+        
+        fetchAPI(date: formattedYesterday)
     }
     
     func bindAction() {
@@ -114,6 +116,16 @@ extension MovieViewController: CustomViewProtocol {
                     print(error)
                 }
             }
+    }
+    
+    private func formattedYesterdayString() -> String {
+        guard let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: Date()) else { return "" }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd"
+        let formattedYesterday = dateFormatter.string(from: yesterdayDate)
+        
+        return formattedYesterday
     }
 }
 
