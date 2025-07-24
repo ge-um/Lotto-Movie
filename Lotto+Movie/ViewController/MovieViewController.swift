@@ -26,26 +26,22 @@ class MovieViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureDependency()
-        configureLayout()
-        configureUI()
-        configureData()
-        configureAction()
+        configureSubviews()
+        configureConstraints()
+        configureStyle()
+        configureInitialData()
+        bindAction()
     }
 }
 
 extension MovieViewController: CustomViewProtocol {
-    func configureData() {
-        fetchAPI()
-    }
-    
-    func configureDependency() {
+    func configureSubviews() {
         view.addSubview(backgroundImageView)
         view.addSubview(searchBar)
         view.addSubview(tableView)
     }
     
-    func configureLayout() {
+    func configureConstraints() {
         backgroundImageView.snp.makeConstraints { make in
             make.size.equalToSuperview()
         }
@@ -64,19 +60,24 @@ extension MovieViewController: CustomViewProtocol {
         }
     }
     
-    func configureUI() {
+    func configureStyle() {
         view.backgroundColor = .black
         backgroundImageView.alpha = 0.3
-                
+    }
+    
+    func configureTableView() {
         tableView.dataSource = self
         tableView.delegate = self
         
         tableView.register(MovieTableViewCell.self, forCellReuseIdentifier: "MovieTableViewCell")
-        
         tableView.backgroundColor = .clear
     }
     
-    func configureAction() {
+    func configureInitialData() {
+        fetchAPI()
+    }
+    
+    func bindAction() {
         searchBar.button.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
     }
     
@@ -85,9 +86,7 @@ extension MovieViewController: CustomViewProtocol {
         searchBar.textField.resignFirstResponder()
         fetchAPI(date: searchBar.textField.text!)
     }
-}
-
-extension MovieViewController {
+    
     func fetchAPI(date: String = "20250723") {
         let url = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=19e95640f81d5ca0abe4c3d77f04eb1d&targetDt=\(date)"
         
@@ -98,7 +97,7 @@ extension MovieViewController {
                 
                 switch response.result {
                 case .success(let boxOfficeResponse):
-
+                    
                     movies = boxOfficeResponse
                         .boxOfficeResult
                         .dailyBoxOfficeList

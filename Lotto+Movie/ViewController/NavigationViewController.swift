@@ -28,16 +28,16 @@ class NavigationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureDependency()
-        configureLayout()
-        configureUI()
-        configureAction()
+        configureSubviews()
+        configureConstraints()
+        configureStyle()
+        bindAction()
         configureNavigation()
     }
 }
 
 extension NavigationViewController: CustomViewProtocol {
-    func configureDependency() {
+    func configureSubviews() {
         stackView.addArrangedSubview(lottoButton)
         stackView.addArrangedSubview(movieButton)
         
@@ -48,7 +48,7 @@ extension NavigationViewController: CustomViewProtocol {
         view.addSubview(stackView)
     }
     
-    func configureLayout() {
+    func configureConstraints() {
         lottoButton.snp.makeConstraints { make in
             make.height.equalTo(44)
         }
@@ -63,11 +63,11 @@ extension NavigationViewController: CustomViewProtocol {
         }
     }
     
-    func configureUI() {
+    func configureStyle() {
         view.backgroundColor = .white
     }
     
-    func configureAction() {
+    func bindAction() {
         lottoButton.addTarget(self, action: #selector(lottoButtonTapped), for: .touchUpInside)
         movieButton.addTarget(self, action: #selector(movieButtonTapped), for: .touchUpInside)
     }

@@ -8,8 +8,8 @@
 import Foundation
 
 @objc protocol CustomViewProtocol {
-    func configureDependency()
-    func configureLayout()
-    func configureUI()
-    @objc optional func configureAction()
+    func configureSubviews()
+    func configureConstraints()
+    func configureStyle()
+    @objc optional func bindAction()
 }
