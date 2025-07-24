@@ -19,37 +19,7 @@ class MovieViewController: UIViewController {
         return imageView
     }()
     
-    let searchTextField: UITextField = {
-        let textField = UITextField()
-        
-        textField.borderStyle = .roundedRect
-        textField.layer.borderColor = UIColor.white.cgColor
-        textField.layer.borderWidth = 1
-        textField.backgroundColor = .clear
-        
-        return textField
-    }()
-    
-    let searchButton: UIButton = {
-        let button = UIButton()
-        
-        button.backgroundColor = .white
-        
-        let attributedString = NSAttributedString(string: "검색", attributes: [.font: UIFont.systemFont(ofSize: 13)])
-        button.setAttributedTitle(attributedString, for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        
-        return button
-    }()
-
-    let searchBar: UIStackView = {
-        let stackView = UIStackView()
-        
-        stackView.axis = .horizontal
-        stackView.distribution = .fill
-        stackView.spacing = 16
-        return stackView
-    }()
+    let searchBar = SearchBar()
     
     let tableView = UITableView()
     
@@ -72,9 +42,16 @@ class MovieViewController: UIViewController {
         configureDependency()
         configureLayout()
         configureUI()
-                
-        searchTextField.delegate = self
-        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+        
+        for view in searchBar.arrangedSubviews {
+            if let textField = view as? UITextField {
+                textField.delegate = self
+            }
+            
+            if let button = view as? UIButton {
+                button.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+            }
+        }
     }
     
     // MARK: - Action
@@ -101,10 +78,6 @@ extension MovieViewController: UITextFieldDelegate {
 extension MovieViewController: CustomViewProtocol {
     func configureDependency() {
         view.addSubview(backgroundImageView)
-        
-        searchBar.addArrangedSubview(searchTextField)
-        searchBar.addArrangedSubview(searchButton)
-        
         view.addSubview(searchBar)
         view.addSubview(tableView)
     }
@@ -112,10 +85,6 @@ extension MovieViewController: CustomViewProtocol {
     func configureLayout() {
         backgroundImageView.snp.makeConstraints { make in
             make.size.equalToSuperview()
-        }
-        
-        searchButton.snp.makeConstraints { make in
-            make.width.equalTo(60)
         }
         
         searchBar.snp.makeConstraints {
